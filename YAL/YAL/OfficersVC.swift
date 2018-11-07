@@ -20,7 +20,11 @@ struct Officer : Codable {
 
 class OfficersVC : UITableViewController {
     var sourceURL : String = "https://pastebin.com/raw/XPtvDijz"
-    var officers : [Officer] = []
+    var officers : [Officer] = [] {
+        didSet {
+            self.tableView.reloadData()
+        }
+    }
     
     
     override func viewDidLoad() {
@@ -38,9 +42,7 @@ class OfficersVC : UITableViewController {
             catch let jsonError {
                 print("Unable to parse officers: Error \(jsonError.localizedDescription)")
                 
-            }
-            self.tableView.reloadData()
-            
+            }            
         }.resume()
         
     }

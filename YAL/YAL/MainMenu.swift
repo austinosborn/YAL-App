@@ -16,6 +16,7 @@ class MainMenu: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         self.navigationController?.navigationBar.barTintColor = UIColor(red: 0.0784, green: 0.21568, blue: 0.37254, alpha: 1)
+        self.navigationController?.navigationBar.tintColor = UIColor.white
         self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.white]
         self.navigationItem.title = "Main Menu"
         UIApplication.shared.statusBarStyle = .lightContent
