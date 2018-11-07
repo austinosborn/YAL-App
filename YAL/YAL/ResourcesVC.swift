@@ -16,16 +16,12 @@ struct Resource : Codable {
 
 class ResourcesVC : UITableViewController {
     
-    var sourceURL : String = "https://pastebin.com/raw/XPtvDijz"
-    var officers : [Officer] = [] {
-        didSet {
-            self.tableView.reloadData()
-        }
-    }
+    var sourceURL : String = "https://pastebin.com/raw/GSufdRt9#"
+    var resources : [Resource] = []
     
     
     override func viewDidLoad() {
-        self.navigationItem.title = "Officer Directory"
+        self.navigationItem.title = "Resources"
         let url = URL(string: sourceURL)
         self.tableView.delegate = self
         self.tableView.dataSource = self
@@ -34,11 +30,14 @@ class ResourcesVC : UITableViewController {
             guard let data = data else { return }
             let dataString = String(data: data, encoding: .utf8)?.replacingOccurrences(of: "\n", with: "").replacingOccurrences(of: "\r", with: "")
             do {
-                self.officers = try JSONDecoder().decode([Officer].self, from: data)
+                self.resources = try JSONDecoder().decode([Resource].self, from: data)
             }
             catch let jsonError {
                 print("Unable to parse officers: Error \(jsonError.localizedDescription)")
                 
+            }
+            DispatchQueue.main.sync {
+                self.tableView.reloadData()
             }
             }.resume()
         
@@ -49,27 +48,23 @@ class ResourcesVC : UITableViewController {
         var cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as UITableViewCell
         cell = UITableViewCell(style: .subtitle, reuseIdentifier: "Cell")
         
-        let officer = officers[indexPath.row]
-        cell.textLabel?.text = officer.name
-        var subtitle = ""
-        if let position = officer.position {
-            subtitle.append("Position: \(position)\n")
-        }
-        if let email = officer.email {
-            subtitle.append("Email: \(email)\n")
-        }
-        if let phone = officer.phone {
-            subtitle.append("Phone: \(phone)\n")
-        }
-        cell.detailTextLabel?.text = subtitle
+        let resource = resources[indexPath.row]
+        cell.textLabel?.text = resource.title
+        cell.detailTextLabel?.text = resource.link
         cell.detailTextLabel?.numberOfLines = 0
         
         return cell
         
     }
     
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        guard let url = URL(string: resources[indexPath.row].link) else { return }
+        UIApplication.shared.open(url)
+    }
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return officers.count
+        return resources.count
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {

@@ -42,6 +42,9 @@ class CalendarVC : UITableViewController {
                 print("Unable to parse officers: Error \(jsonError.localizedDescription)")
                 
             }
+            DispatchQueue.main.sync {
+                self.tableView.reloadData()
+            }
         }.resume()
         
     }

@@ -14,7 +14,7 @@ class MainMenu: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        //Navigation controller/status bar styling
         self.navigationController?.navigationBar.barTintColor = UIColor(red: 0.0784, green: 0.21568, blue: 0.37254, alpha: 1)
         self.navigationController?.navigationBar.tintColor = UIColor.white
         self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.white]
@@ -22,11 +22,13 @@ class MainMenu: UIViewController {
         UIApplication.shared.statusBarStyle = .lightContent
         self.view.backgroundColor = UIColor(red: 0.0784, green: 0.21568, blue: 0.37254, alpha: 1)
         
+        //Stackview holds all menu buttons
         let stack = UIStackView(arrangedSubviews: [
             createButton(name: "Officer Directory", selector: #selector(goToOfficers)),
                 createButton(name: "Resources", selector: #selector(goToResources)),
                 createButton(name: "Calendar Events", selector: #selector(goToCalendar)),
-                createButton(name: "Annoucements", selector: #selector(goToAnnouncements))
+                createButton(name: "Annoucements", selector: #selector(goToAnnouncements)),
+                createButton(name: "Share Our App", selector: #selector(goToShare))
         ])
         for button in stack.subviews {
             button.snp.makeConstraints { (make) in
@@ -37,12 +39,16 @@ class MainMenu: UIViewController {
         stack.axis = .vertical
         stack.distribution = .fillEqually
         stack.spacing = 12
-        
+        //Layout stackview on screen
         self.view.addSubview(stack)
         stack.snp.makeConstraints { (make) in
             make.centerX.centerY.equalToSuperview()
-            make.width.height.equalToSuperview().multipliedBy(0.65)
+            make.width.height.equalToSuperview().multipliedBy(0.6)
         }
+        
+        //Banner
+        
+        
     }
     
     @objc func goToOfficers() {
@@ -59,6 +65,14 @@ class MainMenu: UIViewController {
     
     @objc func goToAnnouncements() {
         self.navigationController?.pushViewController(AnnouncementsVC(), animated: true)
+    }
+    
+    @objc func goToShare() {
+        let alert = UIAlertController(title: "Share Link", message: "Coming later. Sharing will be present if this prototype makes its way into the App Store", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: { _ in
+            alert.dismiss(animated: true, completion: nil)
+        }))
+        self.present(alert, animated: true)
     }
     
     func createButton(name: String, selector: Selector) -> UIView {
