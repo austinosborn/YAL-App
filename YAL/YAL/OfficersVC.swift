@@ -9,6 +9,8 @@
 import Foundation
 import UIKit
 import SnapKit
+import MessageUI
+import Messages
 
 struct Officer : Codable {
     let name : String?
@@ -18,7 +20,7 @@ struct Officer : Codable {
     let image : String?
 }
 
-class OfficersVC : UITableViewController {
+class OfficersVC : UITableViewController, MFMessageComposeViewControllerDelegate, MFMailComposeViewControllerDelegate {
     var sourceURL : String = "https://pastebin.com/raw/XPtvDijz"
     var officers : [Officer] = []
     
@@ -31,7 +33,6 @@ class OfficersVC : UITableViewController {
         self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
         URLSession.shared.dataTask(with: url!) { data, _, _ in
             guard let data = data else { return }
-            let dataString = String(data: data, encoding: .utf8)?.replacingOccurrences(of: "\n", with: "").replacingOccurrences(of: "\r", with: "")
             do {
                 self.officers = try JSONDecoder().decode([Officer].self, from: data)
             }
@@ -70,12 +71,60 @@ class OfficersVC : UITableViewController {
         
     }
     
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        
+        let actionSheet = UIAlertController(title: "Please Select an Action", message: "", preferredStyle: .actionSheet)
+        if let phone = officers[indexPath.row].phone {
+            let call = UIAlertAction(title: "Call: \(phone)", style: .default, handler: { _ in
+                UIApplication.shared.open(URL(string: "tel://\(phone)")!, options: [:], completionHandler: nil)
+            })
+            let text = UIAlertAction(title: "Text: \(phone)", style: .default, handler: { _ in
+                if (MFMessageComposeViewController.canSendText()) {
+                    let controller = MFMessageComposeViewController()
+                    controller.recipients = [String(phone)]
+                    controller.messageComposeDelegate = self as! MFMessageComposeViewControllerDelegate
+                    controller.body = " - Sent from the YAL App"
+                    self.present(controller, animated: true, completion: nil)
+                }
+            })
+            actionSheet.addAction(call)
+            actionSheet.addAction(text)
+        }
+        if let email = officers[indexPath.row].email {
+            let mail = UIAlertAction(title: "Email: \(email)", style: .default, handler: { _ in
+                if (MFMailComposeViewController.canSendMail()) {
+                    let controller = MFMailComposeViewController()
+                    controller.setToRecipients([email])
+                    controller.mailComposeDelegate = self as! MFMailComposeViewControllerDelegate
+                    controller.setSubject("YAL App Contact")
+                    controller.setMessageBody("- Sent from the YAL App", isHTML: false)
+                    self.present(controller, animated: true, completion: nil)
+                }
+            })
+            actionSheet.addAction(mail)
+        }
+        actionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { _ in actionSheet.dismiss(animated: true, completion: nil)
+            
+        }))
+        
+        self.present(actionSheet, animated: true, completion: nil)
+    }
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return officers.count
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
+    }
+    
+    func messageComposeViewController(_ controller: MFMessageComposeViewController, didFinishWith result: MessageComposeResult) {
+        controller.dismiss(animated: true, completion: nil)
+    }
+    
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        controller.dismiss(animated: true, completion: nil)
     }
     
 }

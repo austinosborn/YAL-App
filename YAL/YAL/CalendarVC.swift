@@ -34,7 +34,6 @@ class CalendarVC : UITableViewController {
         self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
         URLSession.shared.dataTask(with: url!) { data, _, _ in
             guard let data = data else { return }
-            let dataString = String(data: data, encoding: .utf8)?.replacingOccurrences(of: "\n", with: "").replacingOccurrences(of: "\r", with: "")
             do {
                 self.events = try JSONDecoder().decode([Event].self, from: data)
             }

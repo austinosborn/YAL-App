@@ -46,7 +46,7 @@ class MainMenu: UIViewController {
             make.width.height.equalToSuperview().multipliedBy(0.6)
         }
         
-        //Banner
+        //Banner 
         
         
     }
