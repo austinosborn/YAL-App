@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import EventKit
 
 struct Event : Codable {
     let title : String?
@@ -82,12 +83,31 @@ class CalendarVC : UITableViewController {
         
     }
     
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        let eventStore = EKEventStore()
+        switch EKEventStore.authorizationStatus(for: EKEntityType.event) {
+        case .authorized:
+            addEvent(event: events[indexPath.row])
+        default:
+            eventStore.requestAccess(to: EKEntityType.event, completion: { (allowed, error) in
+                if allowed {
+                    self.addEvent(event: self.events[indexPath.row])
+                }
+            })
+        }
+    }
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return events.count
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
+    }
+    
+    func addEvent(event: Event) {
+        
     }
     
     
