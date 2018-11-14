@@ -2,18 +2,18 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "yal_icon.png",
+      "filename" : "LibertyBanner.jpg",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "yal_icon.png"
+      "filename" : "LibertyBanner.jpg"
     },
     {
       "idiom" : "universal",
       "scale" : "3x",
-      "filename" : "yal_icon.png"
+      "filename" : "LibertyBanner.jpg"
     }
   ],
   "info" : {

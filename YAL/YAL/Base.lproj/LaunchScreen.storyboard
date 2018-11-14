@@ -18,13 +18,26 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="yal_icon" translatesAutoresizingMaskIntoConstraints="NO" id="hoB-ns-gWQ">
-                                <rect key="frame" x="58" y="206" width="259" height="255"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="eagle" translatesAutoresizingMaskIntoConstraints="NO" id="hoB-ns-gWQ">
+                                <rect key="frame" x="87.5" y="234.5" width="200" height="198"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="200" id="r0g-4M-L4s" userLabel="width = 200"/>
+                                    <constraint firstAttribute="height" constant="198" id="uEI-lR-ad1" userLabel="height = 198"/>
+                                </constraints>
+                            </imageView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="yal_icon" translatesAutoresizingMaskIntoConstraints="NO" id="CrP-QP-QKg">
+                                <rect key="frame" x="89.5" y="462.5" width="196" height="85"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="85" id="3h8-W8-Ux5"/>
+                                    <constraint firstAttribute="width" constant="196" id="LM9-NM-zEp"/>
+                                </constraints>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" red="0.07072179764509201" green="0.18603238463401794" blue="0.32979243993759155" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="hoB-ns-gWQ" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="9CG-g0-v9Y"/>
+                            <constraint firstItem="CrP-QP-QKg" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="Zsv-Af-yZo"/>
+                            <constraint firstItem="CrP-QP-QKg" firstAttribute="top" secondItem="hoB-ns-gWQ" secondAttribute="bottom" constant="30" id="bKC-sy-d78"/>
                             <constraint firstItem="hoB-ns-gWQ" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="xvd-pe-cIx"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
@@ -36,6 +49,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="yal_icon" width="600" height="600"/>
+        <image name="eagle" width="95" height="85"/>
+        <image name="yal_icon" width="196" height="85"/>
     </resources>
 </document>
