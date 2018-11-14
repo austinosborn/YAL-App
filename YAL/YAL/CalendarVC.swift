@@ -20,11 +20,7 @@ struct Event : Codable {
 class CalendarVC : UITableViewController {
     
     var sourceURL : String = "https://pastebin.com/raw/ddADXECj"
-    var events : [Event] = [] {
-        didSet {
-            self.tableView.reloadData()
-        }
-    }
+    var events : [Event] = []
     
     
     override func viewDidLoad() {
@@ -85,17 +81,27 @@ class CalendarVC : UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        let eventStore = EKEventStore()
-        switch EKEventStore.authorizationStatus(for: EKEntityType.event) {
-        case .authorized:
-            addEvent(event: events[indexPath.row])
-        default:
-            eventStore.requestAccess(to: EKEntityType.event, completion: { (allowed, error) in
-                if allowed {
-                    self.addEvent(event: self.events[indexPath.row])
-                }
-            })
+        
+        let alert = UIAlertController(title: "Add event to calendar", message: "Would you like to an this event to your calendar?", preferredStyle: .alert)
+        let yes = UIAlertAction(title: "Yes", style: .default) { (action) in
+            let eventStore = EKEventStore()
+            switch EKEventStore.authorizationStatus(for: EKEntityType.event) {
+            case .authorized:
+                self.addEvent(event: self.events[indexPath.row])
+            default:
+                eventStore.requestAccess(to: EKEntityType.event, completion: { (allowed, error) in
+                    if allowed {
+                        self.addEvent(event: self.events[indexPath.row])
+                    }
+                })
+            }
         }
+        let no = UIAlertAction(title: "No", style: .cancel) { (action) in
+            alert.dismiss(animated: true, completion: nil)
+        }
+        alert.addAction(yes)
+        alert.addAction(no)
+        self.present(alert, animated: true, completion: nil)
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -107,7 +113,19 @@ class CalendarVC : UITableViewController {
     }
     
     func addEvent(event: Event) {
-        
+        let store = EKEventStore()
+        var calendarEvent = EKEvent(eventStore: store)
+        calendarEvent.title = event.title
+        guard let time = event.time else { return }
+        calendarEvent.startDate = Date(timeIntervalSince1970: time)
+        calendarEvent.endDate = calendarEvent.startDate.addingTimeInterval(60 * 60 * 3)
+        calendarEvent.calendar = store.defaultCalendarForNewEvents
+        do {
+            try store.save(calendarEvent, span: .thisEvent)
+        } catch { error
+            print("Error adding event to calendar: \(error.localizedDescription)")
+            
+        }
     }
     
     

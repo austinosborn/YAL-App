@@ -16,8 +16,8 @@ class MainMenu: UIViewController {
         super.viewDidLoad()
         //Navigation controller/status bar styling
         self.navigationController?.navigationBar.barTintColor = UIColor.white
-        self.navigationController?.navigationBar.tintColor = UIColor.white
-        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.white]
+        self.navigationController?.navigationBar.tintColor = UIColor(hexString: "#14375F", alpha: 1)
+        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor(hexString: "#14375F", alpha: 1)]
         let title = UIImageView(image: UIImage(named: "eagle")?.withRenderingMode(.alwaysTemplate))
         title.tintColor = UIColor(hexString: "#14375F", alpha: 1) ?? UIColor.black
         title.contentMode = .scaleAspectFill
